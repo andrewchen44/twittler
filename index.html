@@ -11,10 +11,10 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
-        
+        //get time function
         var getTime = function(){
-        	var n = new Date();
-    	  var hours = n.getHours();
+          var n = new Date();
+    	  var hours = n.getHours().toString();
     	  var minutes = n.getMinutes();
     	  var dight = 'am';
     	if(hours > 11){
@@ -23,8 +23,12 @@
     	if(hours > 12){
     		hours = hours - 12;
     	}
-    	  var time = hours.toString() + ':' + minutes.toString() + ' ' + dight;
-
+    	if(minutes < 10){
+    		minutes = '0' + minutes.toString();
+    	} else{
+    		minutes.toString();
+    	}
+    	  var time = hours + ':' + minutes + ' ' + dight;
          return time;
         }
 
@@ -37,10 +41,14 @@
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
-          var currentUser = $('<a href =""> tweet.user </a>');
+          tweet.time = getTime();
+          var $currentUser = $('<a href=""></a>');
+          $currentUser.text('@' + tweet.user);
 
-          $tweet.text('@' + currentUser + ': ' + tweet.message + ' at ' + getTime());
-          $tweet.appendTo($body)
+          $tweet.text(': ' + tweet.message + ' at ' + tweet.time);
+          $tweet.appendTo($body);
+          $currentUser.prependTo($tweet);
+
           index -= 1;
         }	
 
@@ -52,10 +60,14 @@
           var index = streams.home.length - 1;
           var newTweets = streams.home[streams.home.length - 1];
           var $newTweets = $('<div></div>');
+          tweet.time = getTime();
+          var $currentUser = $('<a href=""></a>');
+          $currentUser.text('@' + newTweets.user);
 
-          $newTweets.text('@' + newTweets.user + ': ' + newTweets.message + 
-          ' at '+ getTime());
+          $newTweets.text( ': ' + newTweets.message + 
+          ' at '+ tweet.time);
           $(this).before($newTweets);  
+          $currentUser.prependTo($newTweets);
 
         });
 
