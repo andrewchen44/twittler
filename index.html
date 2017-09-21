@@ -11,30 +11,50 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
+        
+        var getTime = function(){
+        	var n = new Date();
+    	  var hours = n.getHours();
+    	  var minutes = n.getMinutes();
+    	  var dight = 'am';
+    	if(hours > 11){
+    		dight = 'pm';
+    	}
+    	if(hours > 12){
+    		hours = hours - 12;
+    	}
+    	  var time = hours.toString() + ':' + minutes.toString() + ' ' + dight;
 
+         return time;
+        }
 
-        var $title = $('<p> Your Twits! </p>');
+        //to add a title to the page
+        var $title = $('<p>Twittler </p>');
         $title.appendTo($body);
 
+        //to tweet out all that are available
         var index = streams.home.length - 1;
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
-          var currentUser = tweet.user;
+          var currentUser = $('<a href =""> tweet.user </a>');
 
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
+          $tweet.text('@' + currentUser + ': ' + tweet.message + ' at ' + getTime());
           $tweet.appendTo($body)
           index -= 1;
         }	
 
-        var $button = $('<p id="loader"> <button> Load Newer Tweets! </button> </p');
+        //button to load new tweets
+        var $button = $('<p id="loader"> <button> Load A Newer Tweet! </button> </p');
         $button.appendTo($body);
 
         $("#loader").click(function(){
           var index = streams.home.length - 1;
           var newTweets = streams.home[streams.home.length - 1];
           var $newTweets = $('<div></div>');
-          $newTweets.text('@' + newTweets.user + ': ' + newTweets.message);
+
+          $newTweets.text('@' + newTweets.user + ': ' + newTweets.message + 
+          ' at '+ getTime());
           $(this).before($newTweets);  
 
         });
@@ -48,17 +68,8 @@ two global variables, users and streams.
  2.1 streams.home is an array of all tweets from all the users you're following.   
  2.2 streams.users is an object with properties for each user. streams.users.shawndrost has all of shawndrost's tweets.*
 
-Kicks off a periodic process that puts more data in streams.
-You'll mostly be working in the javascript block of index.html. Note: The generated tweets will be displayed in reverse chronological order.
 
 Bare Minimum Requirements
-1. Show the user new tweets somehow. (You can show them automatically as they're created, or create a button that displays new tweets.)
-2.1 streams.home is an array of all tweets from all the users you're following.
--need to create a button
-	-problem: idk how to create button
--everytime button is clicked, it generated a new tweet
-
-2. Display the timestamps of when the tweets were created. This timestamp should reflect the actual time the tweets were created, and should not just be hardcoded.
 
 3. Design your interface so that you want to look at and use the product you're making.
 
