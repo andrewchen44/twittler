@@ -9,6 +9,11 @@
     <script>
 
       $(document).ready(function(){
+        var shawndrost = [];
+        var sharksforcheap = [];
+        var mracus = [];
+        var douglascalhoun = [];
+
         var $body = $('body');
         $body.html('');
         //get time function
@@ -16,12 +21,15 @@
           var n = new Date();
     	  var hours = n.getHours().toString();
     	  var minutes = n.getMinutes();
-    	  var dight = 'am';
+    	  var dight = ':am ';
     	if(hours > 11){
-    		dight = 'pm';
+    		dight = ':pm ';
     	}
     	if(hours > 12){
     		hours = hours - 12;
+    	} 
+    	if(hours === 0){
+    		hours = hours + 12;
     	}
     	if(minutes < 10){
     		minutes = '0' + minutes.toString();
@@ -42,18 +50,27 @@
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
           tweet.time = getTime();
-          var $currentUser = $('<a href=""></a>');
+          var $currentUser = $('<button class ="user"></button>');
           $currentUser.text('@' + tweet.user);
+          $currentUser.attr('id',tweet.user);
 
-          $tweet.text(': ' + tweet.message + ' at ' + tweet.time);
+          $tweet.text(tweet.message + ' at ' + tweet.time);
           $tweet.appendTo($body);
-          $currentUser.prependTo($tweet);
-
+          $currentUser.appendTo($tweet);
+          if(tweet.user === 'shawndrost'){
+          	shawndrost.push(tweet.message + ' at ' + tweet.time + '@' + tweet.user);
+          } else if(tweet.user === 'sharksforcheap'){
+          	sharksforcheap.push(tweet.message + ' at ' + tweet.time + '@' + tweet.user);
+          } else if (tweet.user === 'douglascalhoun'){
+          	douglascalhoun.push(tweet.message + ' at ' + tweet.time + '@' + tweet.user);
+          } else {
+            mracus.push(tweet.message + ' at ' + tweet.time + '@' + tweet.user);
+          }
           index -= 1;
         }	
 
         //button to load new tweets
-        var $button = $('<p id="loader"> <button> Load A Newer Tweet! </button> </p');
+        var $button = $('<button id = "loader"> Load A Newer Tweet! </button>');
         $button.appendTo($body);
 
         $("#loader").click(function(){
@@ -61,34 +78,57 @@
           var newTweets = streams.home[streams.home.length - 1];
           var $newTweets = $('<div></div>');
           tweet.time = getTime();
-          var $currentUser = $('<a href=""></a>');
-          $currentUser.text('@' + newTweets.user);
+          var $currentUser = $('<button class ="user"></button>');
 
-          $newTweets.text( ': ' + newTweets.message + 
-          ' at '+ tweet.time);
+          $currentUser.text('@' + newTweets.user);
+          $currentUser.attr('id',newTweets.user);
+          $newTweets.text( ': ' + newTweets.message + ' at '+ tweet.time);
+
+         if(newTweets.user === 'shawndrost'){
+          	shawndrost.push(newTweets.message + ' at ' + tweet.time + '@' + newTweets.user);
+          } else if(newTweets.user === 'sharksforcheap'){
+          	sharksforcheap.push(newTweets.message + ' at ' + tweet.time + '@' + newTweets.user);
+          } else if (newTweets.user === 'douglascalhoun'){
+          	douglascalhoun.push(newTweets.message + ' at ' + tweet.time + '@' + newTweets.user);
+          } else {
+            mracus.push(newTweets.message + ' at ' + tweet.time + '@' + newTweets.user);
+          }
+
           $(this).before($newTweets);  
-          $currentUser.prependTo($newTweets);
+          $currentUser.appendTo($newTweets);
+
+
 
         });
 
+        //To show user timelines
+        $('.user').on('click', function(){
+         var id = this.getAttribute('id');
+         var old = [];
+
+         if(id === 'shawndrost'){
+         	old = shawndrost;
+         } else if (id === 'sharksforcheap'){
+         	old = sharksforcheap;
+         } else if (id === 'douglascalhoun'){
+         	old = douglascalhoun;
+         } else {
+         	old = mracus;
+         }
+
+          var index = old.length-1;
+            while(index >= 0){
+            	var oldTweet = old[index];
+            	var $oldTweet = $('<div></div>');
+            	$oldTweet.text(oldTweet);
+            	$oldTweet.appendTo(this);
+
+            	index--;
+            }
+          
+        });
+
       });
-
-/*
-two global variables, users and streams.
-1. users is an array of strings -- all the usernames that you're following.
-2. streams is an object with two properties, users and home.
- 2.1 streams.home is an array of all tweets from all the users you're following.   
- 2.2 streams.users is an object with properties for each user. streams.users.shawndrost has all of shawndrost's tweets.*
-
-
-Bare Minimum Requirements
-
-3. Design your interface so that you want to look at and use the product you're making.
-
-4. Allow the user to click on a username to see that user's timeline.
-2.2 streams.users is an object with properties for each user. streams.users.shawndrost has all of shawndrost's tweets.*/
-
-
 
     </script>
 
